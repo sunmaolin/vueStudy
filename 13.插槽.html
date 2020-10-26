@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>插槽</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<!-- 只要出现多个插槽，请始终为所有的插槽使用完整的基于 <template> 的语法 -->
+			<slot-comp>
+				<!-- 带名字的一定要包裹在template元素中 -->
+				<template v-slot:header>
+					头
+				</template>
+					身体
+				<!-- 缩写 -->
+				<template #footer>脚</template>
+			</slot-comp>
+			
+			<slot-prop>
+				<!-- 父组件访问子组件内容,名字随意 -->
+				<!-- 如果写成v-slot="ceshi"，就是使用默认插槽 -->
+				<template v-slot:default="ceshi">
+					{{ceshi.user.lastName}}
+				</template>
+				<!-- 第二种写法 -->
+				<!--
+				<template v-slot:default="{user}">
+					{{user.lastName}}
+				</template>
+				-->
+			</slot-prop>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var slotComp = {
+			template:`
+				<div>
+					<header><slot name="header"/></header>
+					<!-- 不带名字的，有个默认名字default -->
+					<main><slot/></main>
+					<footer><slot name="footer"/></footer>
+				</div>
+			`
+		}
+		var slotProp = {
+			data(){
+				return {
+					user:{
+						firstName:'孙',
+						lastName:'茂林'
+					}
+				}
+			},
+			template:`
+				<div>
+					<slot :user="user">{{user.firstName}}</slot>
+				</div>
+			`
+		}
+		var vm = new Vue({
+			el:'#app',
+			components:{
+				slotComp,slotProp
+			},
+			data:{
+				
+			}
+		})
+	</script>
+</html>

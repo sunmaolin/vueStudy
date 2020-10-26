@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>条件渲染</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<!-- Vue会复用模板，所以输入的值并不会改变，如果需要改变给input标签添加key值 -->
+			<div>
+				userName登录
+				<input type="radio" value="userName" v-model="typeValue" />
+				email登录
+				<input type="radio" value="email" v-model="typeValue" />
+				<br />
+				<template v-if="typeValue == 'userName'">
+					<label>userName登录</label>
+					<input type="text" placeholder="输入用户名"/>
+				</template>
+				<template v-else>
+					<label>email登录</label>
+					<input type="text" placeholder="邮箱登录"/>
+				</template>
+			</div>
+			<div>
+				<!-- 这里为false也会显示 -->
+				<template v-show="false">
+					v-show不支持template和v-else
+				</template>
+			</div>
+			<!-- v-if与v-else不要一同使用，v-for比v-if有更高的优先级 -->
+		</div>
+	</body>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				typeValue:'userName'
+			}
+		})
+	</script>
+</html>

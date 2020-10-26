@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>列表渲染</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<div>
+				<!-- 遍历对象 -->
+				<div v-for="(value,key,index) in object" :key="index">
+					{{key}}:{{value}}:{{index}}
+				</div>
+			</div>
+			<div>
+				<span v-for="number in numbers()">{{number}}</span>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		//!!!!注意遍历组件的时候，必须加上key
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				object:{
+					firstName:'S',
+					secondName:'M',
+					lastName:'L'
+				}
+			},
+			methods:{
+				numbers(){
+					return [1,2,3,4]
+				}
+			}
+		})
+	</script>
+</html>

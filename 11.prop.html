@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>prop</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<comp :obj="obj"></comp>
+			<comp1 v-bind="obj"></comp1>
+			<comp2 title="头" boby="身体"></comp2>
+		</div>
+	</body>
+	<script type="text/javascript">
+		//!!!!!注意，对象和数组是通过引用传递的
+		//传入对象
+		var comp = {
+			props:['obj'],
+			template:`<div><div>{{obj.title}}</div><div>{{obj.body}}</div></div>`
+		}
+		//传入所有属性
+		var comp1 = {
+			inheritAttrs: false,
+			props:['title','body'],
+			template:`<div><div>{{title}}</div><div>{{body}}</div></div>`
+		}
+		//非props的属性传递，会将属性传递到div根实例的属性上，F12查看下
+		var comp2 = {
+			//该值设为false，就不会继承title="头" boby="身体"这俩个属性
+			inheritAttrs: false,
+			created(){
+				//就算不继承属性，使用$attrs也可以获取到
+				console.log(this.$attrs);
+			},
+			template:`<div>非props属性传递<div>{{$attrs.title}}</div></div>`
+		} 
+		var vm = new Vue({
+			el:'#app',
+			components:{
+				comp,comp1,comp2
+			},
+			data:{
+				obj:{
+					title:'标题',
+					body:'身体'
+				}
+			}
+		})
+		
+		//props组件传递类型
+		Vue.component('my-component', {
+		  props: {
+		    // 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+		    propA: Number,
+		    // 多个可能的类型
+		    propB: [String, Number],
+		    // 必填的字符串
+		    propC: {
+		      type: String,
+		      required: true
+		    },
+		    // 带有默认值的数字
+		    propD: {
+		      type: Number,
+		      default: 100
+		    },
+		    // 带有默认值的对象
+		    propE: {
+		      type: Object,
+		      // 对象或数组默认值必须从一个工厂函数获取
+		      default: function () {
+		        return { message: 'hello' }
+		      }
+		    },
+		    // 自定义验证函数
+		    propF: {
+		      validator: function (value) {
+		        // 这个值必须匹配下列字符串中的一个
+		        return ['success', 'warning', 'danger'].indexOf(value) !== -1
+		      }
+		    }
+		  }
+		})
+	</script>
+</html>

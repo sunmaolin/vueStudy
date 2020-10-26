@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>表单输入绑定</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<!-- 文本框 -->
+			<div>
+				<input type="text" v-model.number="inputMessage" placeholder="edit me">
+				{{inputMessage}}
+			</div>
+			<!-- 复选框 -->
+			<div>
+				<!--  -->
+				<input type="checkbox" v-model="oneCheckedValue"/>
+				{{oneCheckedValue}}<br>
+				<!-- 多个复选框 -->
+				<input type="checkbox"  value="1" v-model="moreCheckedValue"/>
+				<input type="checkbox"  value="2" v-model="moreCheckedValue"/>
+				{{moreCheckedValue}}
+			</div>
+			<!-- 单选按钮 -->
+			<div>
+				<input type="radio" value="1" v-model="radioValue" />
+				<input type="radio" value="2" v-model="radioValue" />
+				{{radioValue}}
+			</div>
+			<!-- 下拉框 multiple属性可多选，绑定数组最好 -->
+			<div>
+				<select v-model="selectValue" multiple>
+					<option value ="1">1</option>
+					<option value ="2">2</option>
+				</select>
+				{{selectValue}}
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		new Vue({
+			el:'#app',
+			data:{
+				inputMessage:'',
+				// 单个复选框，绑定布尔值
+				oneCheckedValue:false,
+				// 多个复选框绑定数组
+				moreCheckedValue:[],
+				radioValue:'',
+				//添加multiple属性时多选最好使用selectValue:[]
+				selectValue:'',
+				
+			}
+		})
+	</script>
+</html>

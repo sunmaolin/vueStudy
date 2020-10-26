@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue实例</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+    <div id="app">
+        {{obj.objMessage}}<input type="text" v-model="obj.objMessage"/>
+		<br/>
+		{{message}}<input type="text" v-model="message" />
+    </div>
+</body>
+<script>
+    var obj = {
+        objMessage:'我不会响应'
+    }
+    //阻止该对象的响应
+    Object.freeze(obj);
+    var vm = new Vue({
+        el:'#app',
+        data:{
+			obj,
+			message:'我会响应'
+        },
+		//不要在实例属性上使用箭头函数，箭头函数中没有this，会往上找
+		created: ()=>{
+			//undefined
+			console.log(this.message)
+		}
+    });
+	//实例属性的使用
+	console.log(vm.$data.obj == obj)
+	console.log(vm.$el == document.getElementById('app'))
+	vm.$watch('message',(newValue,oldValue)=>{
+		console.log(newValue,oldValue);
+	})
+</script>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>监听原生事件</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<!-- @focus.native修饰符，监听根元素原生事件,经过改造，input不是在根元素上，所以是监听不到的 -->
+			<comp v-bind="obj" @focus="onFocus" @input="obj.value=$event"></comp>
+			{{obj.value}}
+		</div>
+	</body>
+	<script type="text/javascript">
+		var comp = {
+			props:['label','value'],
+			computed:{
+				inputListners(){
+					var thisComp = this;
+					// `Object.assign` 将所有的对象合并为一个新对象
+					return Object.assign({},
+						//添加所有的监听器
+						this.$listeners,
+						//自定义监听器
+						{
+							input(event){
+								thisComp.$emit('input',event.target.value)
+							},
+							focus(event){
+								thisComp.$emit('focus',1)
+							}
+						}
+					)
+				}
+			},
+			template:`
+				<label>
+				  {{ label }}
+				  <input
+				    v-bind:value="value"
+				    v-on="inputListners"
+				  >
+				</label>
+			`
+		}
+		var vm = new Vue({
+			el:'#app',
+			components:{
+				comp
+			},
+			data:{
+				obj:{
+					label:'姓名',
+					value:'孙茂林'
+				}
+			},
+			methods:{
+				onFocus(event){
+					console.log("我监听到了focus事件，参数值为："+event)
+				}
+			}
+		})
+	</script>
+</html>

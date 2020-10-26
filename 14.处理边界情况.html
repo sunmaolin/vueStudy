@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>处理边界情况</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<button @click="getChild">访问子组件</button>
+			<child-comp ref="childComp"></child-comp>
+			{{obj}}
+		</div>
+	</body>
+	<script type="text/javascript">
+		// 主要的三个属性 $root,$parent,$refs
+		var lastComp = {
+			methods:{
+				getParent(){
+					alert(this.$parent.parentValue)
+				}
+			},
+			template:`
+				<div>
+					<button @click="getParent">访问父组件</button>
+				</div>
+			`
+		}
+		var childComp = {
+			components:{
+				lastComp
+			},
+			data(){
+				return {
+					parentValue:'我是父组件',
+					childValue:'我是子组件'
+				}
+			},
+			methods:{
+				getRoot(){
+					alert(this.$root.value)
+				}
+			},
+			template:`
+				<div>
+					<button @click="getRoot">访问根实例</button>
+					<last-comp></last-comp>
+				</div>
+			`
+		}
+		var vm = new Vue({
+			el:'#app',
+			components:{
+				childComp,lastComp
+			},
+			data:{
+				value:'我是根实例',
+				obj:{
+					a:1
+				}
+			},
+			mounted(){
+				this.obj.b=2
+				//强制更新，因为obj的b属性是后加的，并没有加入响应中，所以需要强制更新数据
+				this.$forceUpdate()
+			},
+			methods:{
+				getChild(){
+					alert(this.$refs.childComp.childValue)
+				}
+			}
+		})
+	</script>
+</html>

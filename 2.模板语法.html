@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>模板语法</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<div>
+				<input type="text" v-model="message" />
+				<div v-once>我只执行一次{{message}}</div>
+			</div>
+			<div>
+				输出html《input type="radio"》
+				<span v-html="html"></span>
+			</div>
+			<div>
+				<button type="button" :disabled="disabled">绑定数据禁用</button>
+			</div>
+			<div>
+				使用表达式：{{1+1}} <br />
+				这不是表达式是语句：<!-- {{var a = 1}} -->
+			</div>
+			<div>
+				动态参数<br>
+				属性名<input type="text" v-model="attrname" /><br />
+				属性值<input type="text" v-model="attrValue"><br />
+				<!-- 使用小写，浏览器会把attrName强制转换为小写 -->
+				<input :[attrname]="attrValue" />
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				message:'a',
+				html:'<input type="radio">',
+				disabled:true,
+				attrname:'type',
+				attrValue:'text'
+			}
+		})
+	</script>
+</html>

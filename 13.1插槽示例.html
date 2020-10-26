@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>todos</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<!-- 需要注意的地方使用叹号标明 -->
+			<todo-list :todos="todos">
+				             <!-- !!!!! -->
+				<template v-slot:todo="{todo}">
+					<span v-if="todo.complete">√</span>
+					{{todo.text}}
+				</template>
+			</todo-list>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var todoList = {
+			props:['todos'],
+			template:`
+				<ul>
+					<li v-for="todo,index in todos" :key="index">
+										<!-- !!!!!!! -->
+						<slot name="todo" :todo="todo">{{todo.text}}</slot>
+					</li>
+				</ul>
+			`
+		}
+		var vm = new Vue({
+			el:'#app',
+			components:{
+				todoList
+			},
+			data:{
+				todos:[{
+					text:'1',
+					complete:true
+				},{
+					text:'2',
+					complete:true
+				},{
+					text:'3',
+					complete:true
+				}]
+			}
+		})
+	</script>
+</html>

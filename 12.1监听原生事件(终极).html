@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>监听原生事件</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<comp v-bind.sync="obj" :foot-value.sync="footValue"></comp>
+			<!-- 双向绑定.sync   foot-value相当于下面这样写 -->
+			<!-- <comp :foot-value="footValue" @update:foot-value="footValue=$event"></comp> -->
+			<br>{{obj.value}}<br>
+			{{footValue}}
+		</div>
+	</body>
+	<script type="text/javascript">
+		var comp = {
+			props:['label','value','footValue'],
+			template:`
+				<label>
+				  {{ label }}
+				  <input
+				    v-bind:value="value"
+				    @input="$emit('update:value',$event.target.value)"
+				  >
+				  <input
+					:value="footValue"
+					@input="$emit('update:foot-value',$event.target.value)"
+				  >
+				</label>
+			`
+		}
+		var vm = new Vue({
+			el:'#app',
+			components:{
+				comp
+			},
+			data:{
+				obj:{
+					label:'姓名',
+					value:'孙茂林'
+				},
+				footValue:'脚'
+			},
+			methods:{
+				onFocus(event){
+					console.log("我监听到了focus事件，参数值为："+event)
+				}
+			}
+		})
+	</script>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>监听子组件</title>
+	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<body>
+		<div id="app">
+			<div>
+				<input type="text" v-model="message">
+				<!-- 下面是上面v-model的实现，语法糖 -->
+				<input type="text" :value="message" @input="message=$event.target.value"/>
+				{{message}}
+			</div>
+			<div>
+				<input-comp v-model="compMessage"></input-comp>
+				{{compMessage}}
+			</div>
+			<div :style="{backgroundColor:color}">
+				<div-comp :color="color" @changecolor="changeColor"></div-comp>
+			</div>
+			<!-- 动态组件 is属性指定组件名字可以进行组件切换 -->
+			<component is="div-comp"></component>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var inputComp = {
+			//使用v-model必须接收一个value属性
+			props:['value'],
+			template:`<input type="text" :value="value" @input="$emit('input',$event.target.value)">`
+		}
+		var divComp = {
+			props:['color'],
+			data(){
+				return {
+					style:{
+						width:'50px',
+						height:'50px',
+						backgroundColor:this.color
+					}
+				}
+			},
+			watch:{
+				//上面将color给backgroundColor赋值，corlor改变时并不会动态改变backgroundColor
+				//仔细思考，并不是因为color没有动态改变
+				color(newValue,oldValue){
+					this.style.backgroundColor=newValue
+				}
+			},
+			//使用$emit抛出，$event接收，你会发现并不能动态改变子组件
+			template:`<div :style="style" @click="$emit('changecolor','green')">点我</div>`
+		}
+		var vm = new Vue({
+			el:'#app',
+			components:{
+				inputComp,divComp
+			},
+			methods:{
+				changeColor(color){
+					this.color=color
+				}
+			},
+			data:{
+				message:'',
+				compMessage:'',
+				color:'red'
+			}
+		});
+	</script>
+</html>
